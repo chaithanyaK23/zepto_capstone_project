@@ -1,7 +1,7 @@
 """
 Q1 Data Pipeline: scrape, clean, convert, store, and query book catalogue data.
 
-This script is intentionally written as a single beginner-friendly pipeline:
+This data pipeline includes:
 1. Scrape book data from books.toscrape.com.
 2. Clean raw text fields into useful Python/pandas types.
 3. Convert GBP prices to INR with the fixed project rate.
@@ -22,16 +22,16 @@ import requests
 from bs4 import BeautifulSoup
 
 
-# The assignment requires this fixed baseline rate. It is not a live market rate.
+# The given project's fixed baseline rate.
 GBP_TO_INR_RATE = 105.50
 
-# Keep all generated files inside the data_pipeline module folder.
+# To keep all generated files inside the data_pipeline module folder.
 MODULE_DIR = Path(__file__).resolve().parent
 DATABASE_PATH = MODULE_DIR / "books_catalog.db"
 CLEANED_CSV_PATH = MODULE_DIR / "cleaned_books.csv"
 QUERY_OUTPUT_PATH = MODULE_DIR / "query_outputs.md"
 
-# Books to Scrape is a public scraping-practice site.
+# URL to scrape books from a public scraping-practice site, the minimum criteria for scraping given in the project.
 BASE_URL = "https://books.toscrape.com/"
 MIN_CATEGORIES = 3
 MIN_BOOKS = 60
@@ -106,7 +106,7 @@ def scrape_category(category_name: str, category_url: str) -> list[dict[str, str
 
 
 def scrape_books() -> pd.DataFrame:
-    """Scrape categories until the dataset satisfies the assignment minimums."""
+    """Scrape categories until the dataset satisfies the required minimums."""
     all_books: list[dict[str, str]] = []
     categories_used = 0
 
