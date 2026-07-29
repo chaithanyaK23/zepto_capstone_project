@@ -144,14 +144,14 @@ def create_univariate_charts(df: pd.DataFrame) -> list[str]:
         plt.title(f"{column.title()} Distribution")
         path = CHART_DIR / f"{column}_histogram.png"
         save_plot(path)
-        chart_paths.append(str(path.relative_to(MODULE_DIR)))
+        chart_paths.append(path.relative_to(MODULE_DIR).as_posix())
 
         plt.figure(figsize=(8, 3))
         sns.boxplot(x=df[column])
         plt.title(f"{column.title()} Box Plot")
         path = CHART_DIR / f"{column}_boxplot.png"
         save_plot(path)
-        chart_paths.append(str(path.relative_to(MODULE_DIR)))
+        chart_paths.append(path.relative_to(MODULE_DIR).as_posix())
 
     return chart_paths
 
@@ -165,7 +165,7 @@ def create_bivariate_and_story_charts(df: pd.DataFrame, corr: pd.DataFrame) -> d
     plt.title("Correlation Heatmap")
     path = CHART_DIR / "correlation_heatmap.png"
     save_plot(path)
-    chart_paths["correlation_heatmap"] = str(path.relative_to(MODULE_DIR))
+    chart_paths["correlation_heatmap"] = path.relative_to(MODULE_DIR).as_posix()
 
     plt.figure(figsize=(8, 5))
     sns.barplot(data=df, x="pclass", y="survived", hue="sex", errorbar=None)
@@ -173,21 +173,21 @@ def create_bivariate_and_story_charts(df: pd.DataFrame, corr: pd.DataFrame) -> d
     plt.title("Survival by Sex and Passenger Class")
     path = CHART_DIR / "story_survival_by_sex_class.png"
     save_plot(path)
-    chart_paths["story_survival_by_sex_class"] = str(path.relative_to(MODULE_DIR))
+    chart_paths["story_survival_by_sex_class"] = path.relative_to(MODULE_DIR).as_posix()
 
     plt.figure(figsize=(8, 5))
     sns.boxplot(data=df, x="survived", y="age", hue="sex")
     plt.title("Age by Survival Outcome and Sex")
     path = CHART_DIR / "story_age_by_survival_sex.png"
     save_plot(path)
-    chart_paths["story_age_by_survival_sex"] = str(path.relative_to(MODULE_DIR))
+    chart_paths["story_age_by_survival_sex"] = path.relative_to(MODULE_DIR).as_posix()
 
     plt.figure(figsize=(8, 5))
     sns.boxplot(data=df, x="pclass", y="fare", hue="survived")
     plt.title("Fare by Class and Survival Outcome")
     path = CHART_DIR / "story_fare_by_class_survival.png"
     save_plot(path)
-    chart_paths["story_fare_by_class_survival"] = str(path.relative_to(MODULE_DIR))
+    chart_paths["story_fare_by_class_survival"] = path.relative_to(MODULE_DIR).as_posix()
 
     story_df = df.copy()
     story_df["family_size"] = story_df["sibsp"] + story_df["parch"] + 1
@@ -203,7 +203,7 @@ def create_bivariate_and_story_charts(df: pd.DataFrame, corr: pd.DataFrame) -> d
     plt.title("Survival by Family Size")
     path = CHART_DIR / "story_family_size_survival.png"
     save_plot(path)
-    chart_paths["story_family_size_survival"] = str(path.relative_to(MODULE_DIR))
+    chart_paths["story_family_size_survival"] = path.relative_to(MODULE_DIR).as_posix()
 
     return chart_paths
 
