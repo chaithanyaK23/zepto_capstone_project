@@ -130,9 +130,11 @@ def retrieve_and_answer(state: SupportState) -> SupportState:
     sources = [chunk["chunk_id"] for chunk in chunks]
 
     if is_mock_mode():
-        top_chunk_snippet = chunks[0]["text"][:200] if chunks else ""
+        # Each chunk is now a complete sentence, so the top result is a
+        # clean, self-contained answer — no joining of fragments needed.
+        top_sentence = chunks[0]["text"] if chunks else ""
         response = AskResponse(
-            answer=f"Based on the retrieved context: {top_chunk_snippet}",
+            answer=f"Based on the retrieved context: {top_sentence}",
             sources=sources,
             confidence=1.0,
         )

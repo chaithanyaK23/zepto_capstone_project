@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENV MOCK_LLM=1
-EXPOSE 7860
+EXPOSE 8000
 
 # Serve the FastAPI app locally on the required port.
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
