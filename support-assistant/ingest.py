@@ -14,21 +14,36 @@ COLLECTION_NAME = "zepto_policy_corpus"
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 
 
+import re
+
+def split_by_sentences(text: str) -> list[str]:
+    raw = re.split(r'\.(?=\s|$)', text)
+    sentences = [s.strip().strip('"').strip() for s in raw]
+    # Append a period back to the sentences since re.split removed them
+    return [s + "." for s in sentences if len(s) > 10]
+
 def load_documents() -> list[dict[str, str]]:
-    """Load the committed Zepto policy documents as one chunk per file."""
+    """Load the committed Zepto policy documents and split into overlapping 2-sentence chunks."""
     documents: list[dict[str, str]] = []
+    source_count = 0
 
     for path in sorted(DOCS_DIR.glob("doc_*.txt")):
-        documents.append(
-            {
-                "chunk_id": path.stem,
-                "source": path.name,
-                "text": path.read_text(encoding="utf-8").strip(),
-            }
-        )
+        source_count += 1
+        text = path.read_text(encoding="utf-8").strip()
+        sentences = split_by_sentences(text)
+        
+        for i in range(len(sentences)):
+            chunk_text = " ".join(sentences[i:i+2])
+            documents.append(
+                {
+                    "chunk_id": f"{path.stem}_chunk_{i}",
+                    "source": path.name,
+                    "text": chunk_text,
+                }
+            )
 
-    if len(documents) != 8:
-        raise RuntimeError(f"Expected 8 policy documents, found {len(documents)}.")
+    if source_count != 8:
+        raise RuntimeError(f"Expected 8 policy documents, found {source_count}.")
 
     return documents
 
